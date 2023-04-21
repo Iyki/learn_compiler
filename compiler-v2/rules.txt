@@ -1,0 +1,34 @@
+What are the rules? 
+
+Tokens: 
+- command
+- tab 
+- ext 
+- options
+- filename 
+keyword = static?, extern
+
+Rules: 
+file: file declaration | file function | declaration | function | (optional) define/include statements
+
+declaration: keyword type name ( type ) ';' | keyword type name ( ) ';'
+statements: statements statement | statement
+
+statement: if_statement | if_else_statement | while_statement | block_statement ; | assignment ;
+
+if_statement: IF ( block_statement ) block_statement ; | IF ( block_statement ) { statements }
+
+if_else_statement: if_statement ELSE block_statement | if_statement ELSE { statements }
+
+while_statement: WHILE ( block_statement ) block_statement | WHILE (block_statement) { statements }
+
+block_statement: VAR_NAME | name operator name | ( block_statement )
+
+name: VAR_NAME | NUM
+
+assignment: VAR_NAME = block_statement
+
+keyword: static | extern
+operator: '+' | '-' | '*' | '/'
+
+
