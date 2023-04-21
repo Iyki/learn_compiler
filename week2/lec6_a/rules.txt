@@ -1,0 +1,55 @@
+What are the rules? 
+
+Tokens: 
+- command
+- tab 
+- ext 
+- options
+- filename 
+
+Rules: 
+# assignment 
+filename = filename 
+
+# statement
+# 0 or more for tab  
+tab command options* ($(filename).extension)* (filename.extension)*
+
+# identifiers 
+$(filename).extension: [($(filename).extension) (filename.extension)]*
+filename: [($(filename).extension) (filename.extension)]*
+
+Rules: 
+
+# assignment 
+filename = filename
+
+# statement 
+tab command options filename(s) 
+
+# identifiers
+filename: filesname(s) 
+filename: 
+
+----------------------------
+My rules for the yacc file
+
+targets: | targets target | targets assignment
+assignment: filename = filename
+
+target: filename : filenames commands
+
+commands: | commands command
+command: tabs COMND options filenames
+
+
+-----------------
+# if no regex functionality
+filenames: filenames filename
+filename: $ ( FNAME ) EXT | FNAME EXT | FNAME
+
+tabs: tabs tab
+tab: TAB
+
+options: options option
+option: OPTIONS

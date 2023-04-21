@@ -1,0 +1,54 @@
+// left recursion preferred over right recursion (base case is last item?). because yacc works based on a stack. With right recursion, stack gets very very big
+
+yywrap can help you to parse multiple files (not needed in this class though)
+Never end program with 0 - can cause infinite loops. Instead return 1
+
+run yacc with `-d` option in order to create a make file.
+
+scores: scores score {$$ = $1 + $2;
+                      printf("Total:")}
+
+        | score {$$ = $1;}
+score: NAME ':' NUM {$$ = $3;}
+
+
+April 14, 2023
+LLVM is extra credit for part 2
+
+creating tree nodes list for recursive descent parser/grammer
+stmts: stmt stmts {$$ = $1;
+                   $$->push_back($2);}
+      | stmt {$$ = new vector<astNode*>;
+              $$->push_back($1);}
+can also call printNodes()
+
+symbol table can be used to keep track of variables, thus you can keep track of what is being used before declatation. It can be implemented as a stack of vectors. stack implemenatation is to preserve context and keep track of all variables in the current scope.
+assignment: create the symbol table and the AST tree
+
+item:
+itemset:
+closure:
+    s1->s2.s3
+
+LLVM IR: (ntermediate representation for LLVM??)
+global optimization and basic blocks
+context is used/created to make it thread-safe (not implemented in this class)
+(ast.c, ast.h is the module)
+Single Static Assignment (SSA) form:
+        transform the code into a form such that every variable is assigned to only once
+        resolve scenario where a variable is assigned to multiple times (like in if statement)
+
+IR language: (happens before optimization, during and after)
+  - local variables: start with '%'
+  - global variables: start with '@'
+  - constants: start with '#'?
+  
+look at the header files here
+/usr/include/llvm-c-15
+"/usr/include/llvm-c-15/llvm-c/"
+
+
+
+
+
+
