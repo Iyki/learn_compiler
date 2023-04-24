@@ -44,8 +44,15 @@ IR language: (happens before optimization, during and after)
   - constants: start with '#'?
   
 look at the header files here
-/usr/include/llvm-c-15
 "/usr/include/llvm-c-15/llvm-c/"
+
+
+sequence of calls for compiler
+yyparse()
+semanticAnalysis()
+m = ast_to_IR()
+m_op = optimizer(m)
+codegen(m_op)
 
 
 
