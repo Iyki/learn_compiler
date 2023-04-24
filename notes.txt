@@ -54,7 +54,9 @@ m = ast_to_IR()
 m_op = optimizer(m)
 codegen(m_op)
 
-
+// parser memory leaks
+free block_statement, var_decls or stmt_list
+and copies from lex file
 
 
 
