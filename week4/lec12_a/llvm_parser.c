@@ -35,7 +35,19 @@ void walkBBInstructions(LLVMBasicBlockRef bb){
 	
 		//LLVMGetInstructionOpcode gives you LLVMOpcode that is a enum		
 		LLVMOpcode op = LLVMGetInstructionOpcode(instruction);
-        	
+    // get the number of operands for the instruction
+    int numOperands = LLVMGetNumOperands(instruction);
+    // find the operands of the instruction
+    LLVMValueRef *operands = calloc(numOperands, sizeof(LLVMValueRef));
+    LLVMGetMDNodeOperands(instruction, operands);
+
+    // print operands only when they are integer constants
+    LLVMTypeRef LLVMGetGEPSourceElementType(LLVMValueRef GEP);
+
+    for (int i = 0; i < numOperands; ++i) {
+
+    }
+
 		//if (op == LLVMCall) //Type of instruction can be checked by checking op
 		//if (LLVMIsACallInst(instruction)) //Type of instruction can be checked by using macro defined IsA functions
 		//{
