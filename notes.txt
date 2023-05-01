@@ -61,3 +61,119 @@ and copies from lex file
 
 
 
+Comparing LLVM IR Code and C Code
+
+Building control flow graphs: 
+- see class recording 
+- we can look at the LLVM IR file and map out how blocks are connected to each other
+    - in predecessor and successor patterns
+- we can also look at the C code and map out how blocks are connected to each other
+- with this information, we can draw a control flow graph
+- the control flow graph will let us gain insights into the analysis that we need to perform on the code
+
+For each basic block we will define: 
+# NOTE: See class recording for better explanation and diagrams
+# Detailed description of the algorithm is on Canvas
+- a GEN
+    - the set of variables (store instructions in LLVM IR) that
+        were created in the basic block and reach the end of the basic block
+        - that means they are not overwritten before the block finishes executing
+- a KILL set
+    - let's have a set, the set of all store instructions (i.e. variables)
+         that occur in the program (i.e. in all basic blocks)
+    - the set of store instructions (i.e. variables) that 
+        are in other basic blocks, but are overwritten("killed") 
+        in the current basic block
+    - elements in the KILL set are the `stores` from other basic blocks
+        that can be killed in the basic block that we are currently analyzing 
+        that is why we compute the set of all stores in the entire program 
+            and then use it to compute the ones that will be killed in the current block
+- and then we will compute the IN and OUT sets
+    - IN set
+        - the IN set initially starts out empty (i.e. no variables are defined)
+        - we populate it by taking the union of the GEN set (i.e. the OUT sets)
+            - from all the predecessor blocks that go into the basic block
+    - OUT set
+        - this is the GEN set of the basic block 
+        - these are all the store instructions that reach the end of the basic block
+    - as we iteratively compute the CFG, IN and OUT set change appropriately 
+        - for instance as some step in the iteration, we can have: 
+            OUT[B] = GEN[B] U (IN[B] - KILL[B])
+                * where `U` is the union operator
+
+At some point this iterative modifications to the IN and OUT sets will stabilize.
+That is, it will reach a convergence point as the sets cannot be infinite.
+When we reach this point, we conclude that we have reached the end of our iterative analysis. 
+At this point, we can guarantee that we have performed maximal 
+`constant propagation` and `constant folding` on the code.
+
+Class Activity
+- Compute the KILL, GEN, IN and OUT sets
+- See files in `Slack`
+
+## test3.c and test3.ll
+-> STEP 1: Identity all the blocks
+    - Block %1
+        Stores: %2 (ln. 12), %3 (ln. 13), %4 (ln. 14)
+        GEN: %2 (ln. 12), %3 (ln. 13), %4 (ln. 14) [nothing is killed]
+        KILL: %2 (Block 10, ln. 27), %3 (Block 10, ln. 24)
+
+        IN: 
+        OUT: 
+
+    - Block %6 
+        pred: Blocks %10, %1
+        Stores: NULL
+        GEN: NULL
+        KILL: NULL
+
+        IN: 
+        OUT: 
+
+
+    - Block %10
+        pred: Block %6
+        Stores: %3 (ln. 24), %2 (ln. 27)
+        GEN: %3 (ln. 24), %2 (ln. 27)
+        KILL: %2 (Block 1, ln. 12), %3 (Block 1, ln. 13)
+
+        IN: 
+        OUT: 
+
+    - Block %13
+        pred: Block %6
+        Stores: %5 (ln. 34)
+        GEN: %5 (ln. 34)
+        KILL: NULL (a store cannot kill itself)
+
+        IN: 
+        OUT: 
+
+    ALL Stores: %2, %3, %4, %5
+
+Blocks: 
+    Global set: %3, %6, %4, %10, %5, %7, %4
+    Block %1
+        gen set: b1l8s3, b1l9s6, b1l12s4, b1l9s6, b1l13s10, b1l16s5, 4, %5, %7, %4
+    Block %16
+        pred: %19, %1
+        gen set: 
+        kill: %3, %6, %4, %3, %6, %10, %5, %4, %5, %7, %4
+    Block %19
+        pred: %16
+        gen set: %
+    # Block %26
+    #     pred: %16
+    # Block %29
+    #     pred: %26
+    # Block %31
+    #     pred: %26
+    # Block %32
+    #     pred: %29, %31
+
+
+
+
+
+
+
