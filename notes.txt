@@ -172,6 +172,13 @@ Blocks:
     #     pred: %29, %31
 
 
+optimization loop:
+  Constant folding  - add, mul, sub - local
+  Common subexpression elimination - local
+  - add, mul, sub, (div - SSA)
+  - load - safety check
+  Dead code elimination - local
+  Constant propagation - (gen set, kill set, in, out) - Global
 
 
 
