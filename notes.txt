@@ -180,7 +180,7 @@ optimization loop:
   Dead code elimination - local
   Constant propagation - (gen set, kill set, in, out) - Global
 
-
-
+OUT = union(IN_s1, IN_s2, IN_s3)
+OUT[blk] = union( GEN[blk], (IN[blk] - KILL[blk]) )
 
 
