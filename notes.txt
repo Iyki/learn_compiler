@@ -45,7 +45,8 @@ IR language: (happens before optimization, during and after)
   
 look at the header files here
 "/usr/include/llvm-c-15/llvm-c/"
-
+instructor.h
+/usr/lib/llvm-15/include/llvm/IR/Instruction.h
 
 sequence of calls for compiler
 yyparse()

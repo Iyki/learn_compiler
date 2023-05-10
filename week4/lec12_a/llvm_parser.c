@@ -34,24 +34,45 @@ void walkBBInstructions(LLVMBasicBlockRef bb){
   				instruction = LLVMGetNextInstruction(instruction)) {
 	
 		//LLVMGetInstructionOpcode gives you LLVMOpcode that is a enum		
-		LLVMOpcode op = LLVMGetInstructionOpcode(instruction);
-    // get the number of operands for the instruction
+		LLVMOpcode opcode = LLVMGetInstructionOpcode(instruction);
+    // print the number of operands for the instruction
     int numOperands = LLVMGetNumOperands(instruction);
+    printf("Number of operands: %d\n", numOperands);
+    
     // find the operands of the instruction
-    LLVMValueRef *operands = calloc(numOperands, sizeof(LLVMValueRef));
-    LLVMGetMDNodeOperands(instruction, operands);
+    // LLVMValueRef *operands = calloc(numOperands, sizeof(LLVMValueRef));
+    // LLVMGetMDNodeOperands(instruction, operands);
 
     // print operands only when they are integer constants
-    LLVMTypeRef LLVMGetGEPSourceElementType(LLVMValueRef GEP);
+    // LLVMTypeRef LLVMGetGEPSourceElementType(LLVMValueRef GEP);
 
-    for (int i = 0; i < numOperands; ++i) {
-
+    bool allOperandsAreConstants = true;
+    for (uint i = 0; i < numOperands; ++i) {
+      LLVMValueRef operand = LLVMGetOperand(instruction, i);
+      if (LLVMIsAConstantInt(operand)) {
+        printf("Const int operand at index %d: %lld\n", i, LLVMConstIntGetSExtValue(operand));
+      } 
+      else {
+        allOperandsAreConstants = false;
+      }
+    }
+    if (allOperandsAreConstants) {
+      printf("all operands are const for instruction:\n");
+      LLVMDumpValue(instruction);
+      printf("\n");
     }
 
 		//if (op == LLVMCall) //Type of instruction can be checked by checking op
 		//if (LLVMIsACallInst(instruction)) //Type of instruction can be checked by using macro defined IsA functions
 		//{
-		
+		/**
+      Use the code in llvm_parser.c to do the following:
+      Prints the number of operands for each instruction
+      Find the operands of the instruction (be ready to be surprised)
+      Prints operands only when they are integer constants
+      Print instructions when all operands are constants
+		 * 
+		 */
 
 	}
 
